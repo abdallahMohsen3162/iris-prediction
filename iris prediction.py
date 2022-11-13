@@ -8,7 +8,15 @@ from sklearn import datasets as ds
 from sklearn.datasets import (load_iris,make_classification)
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
+from sklearn.linear_model import LinearRegression
+from sklearn.datasets import make_regression
+import seaborn as sns
+from mlxtend import plotting as pl
+from sklearn.naive_bayes import GaussianNB
+from sklearn.decomposition import PCA
 
+
+#from sklearn.model_selection import train_test_split
 iris = sklearn.datasets.load_iris()
 
 def p(*priI_Inted):
@@ -38,7 +46,7 @@ def Split(Data,Labels,testRatio,valRatio):
         allData.append(x)
 
 
-    random.seed(2)
+    random.seed(7)
     random.shuffle(allData)
     
     
@@ -98,15 +106,24 @@ Labels = iris.target
 x_train,x_test,x_val,y_val,y_train,y_test = Split(Data,Labels,0.30,0.30)
 
 
-
-clf = SVC()
+clf = GaussianNB()
 
 clf.fit(x_train,y_train)
-p(y_test)
-p('*'*10)
+
+
 predicted_y = clf.predict(x_test)
 
 accuracy = calculate_accuracy(predicted_y,y_test)
 
+
 p(accuracy)
 
+
+    
+pca = PCA(n_components=2)
+
+
+xx = pca.fit_transform(x_train)
+clf.fit(xx,y_train)
+pl.plot_decision_regions(xx, y_train, clf=clf)
+plt.show()
